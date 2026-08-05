@@ -69,4 +69,114 @@
 // =============================================================================
 
 const readlineSync = require('readline-sync');
+//Function to read a matrix from user input
+function readMatrix(matrixName) {
+    console.log(`\nEntering ${matrixName}:`);
+  let rows = readlineSync.questionInt("Enter number of rows: ");
+  let cols = readlineSync.questionInt("Enter number of columns: ");
 
+  let matrix = [];  
+for (let i = 0; i < rows; i++) {
+    let rowInput = readlineSync.question(`Enter row ${i + 1}: `);
+    let row = rowInput.split(' ').map(Number);
+    matrix.push(row);
+}
+return matrix;
+}
+//Function to display a matrix in a neat grid format
+function displayMatrix(matrix) {
+    for (let i = 0; i < matrix.length; i++) {
+        console.log(matrix[i].join(' '));
+    }
+}
+// Part A — Transpose a Matrix
+function transposeMatrix(M) {
+    let transposed = [];
+    let rows = M.length;
+    let cols = M[0].length;
+
+    for (let j = 0; j < cols; j++) {
+        let newRow = [];
+        for (let i = 0; i < rows; i++) {
+            newRow.push(M[i][j]);
+        }
+        transposed.push(newRow);
+    }
+    return transposed;
+}
+//Part B — Add Two Matrices
+function addMatrices(M, N) {
+    let rows = M.length;
+    let cols = M[0].length;
+    let result = [];
+
+    for (let i = 0; i < rows; i++) {
+        let currentRow = [];
+        for (let j = 0; j < cols; j++) {
+            currentRow.push(M[i][j] + N[i][j]);
+        }
+        result.push(currentRow);
+    }
+    return result;
+}
+//Part C — Multiply Two Matrices
+function multiplyMatrices(M, N) {
+    let rowsM = M.length;
+    let colsM = M[0].length;
+    let rowsN = N.length;
+    let colsN = N[0].length;
+
+    if (colsM !== rowsN) {
+        console.log("Error: Number of columns in Matrix M must equal number of rows in Matrix N.");
+        return null;
+    }
+
+    let result = [];
+    for (let i = 0; i < rowsM; i++) {
+        let currentRow = [];
+        for (let j = 0; j < colsN; j++) {
+            let sum = 0;
+            for (let k = 0; k < colsM; k++) {
+                sum += M[i][k] * N[k][j];
+            }
+            currentRow.push(sum);
+        }
+        result.push(currentRow);
+    }
+    return result;
+}
+function main() {
+    // Part A: Transpose a Matrix
+   console.log("=== Part A: Transpose a Matrix ===");
+   let matrixA = readMatrix("Matrix A");
+   console.log("\nOriginal Matrix:");
+   displayMatrix(matrixA);
+
+
+   console.log("\nTransposed Matrix:");
+   displayMatrix(transposeMatrix(matrixA));
+
+   console.log("\n=== Part B: Add Two Matrices ===");
+   console.log("Enter first matrix for addition:");
+   let M = readMatrix("Matrix M");
+   console.log("Enter second matrix for addition:");
+   let N = readMatrix("Matrix N");
+
+   let sumMatrix = addMatrices(M, N);
+   if (sumMatrix) {
+       console.log("\nSum of Matrices:");
+       displayMatrix(sumMatrix);
+   }
+   console.log("\n=== Part C: Multiply Two Matrices ===");
+   console.log("Enter Matrix M for multiplication:");
+   let matrixM = readMatrix("Matrix M");
+   console.log("Enter Matrix N for multiplication:");
+   let matrixN = readMatrix("Matrix N");
+
+   let productMatrix = multiplyMatrices(matrixM, matrixN);
+   if (productMatrix) {
+       console.log("\nProduct of Matrices:");
+       displayMatrix(productMatrix);
+   }
+}
+main();
